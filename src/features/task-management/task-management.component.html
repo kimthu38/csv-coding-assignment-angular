@@ -1,23 +1,45 @@
-<table>
-    <thead>
-        <tr>
-            <th>Task</th>
-            <th>Description</th>
-            <th>Assignee</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let t of tasks|async">
-            <td>{{t.id}}</td>
-            <td>{{t.description}}</td>
-            <td>{{findUserById(t.assigneeId)}}</td>
-            <td>{{t.completed ? 'Completed' : 'Not completed'}}</td>
-            <td>
-                <button (click)="onAssign(t)">Assign</button>
-                <button (click)="onComplete(t)">{{!t.completed ? 'Complete' : 'Back to incomplete'}}</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<nz-space nzDirection="vertical">
+    <div *nzSpaceItem>
+        <button nz-button [nzType]="'primary'" (click)="toggleAddModal()"><span>Add task</span></button>
+        <app-add-task-modal [isVisibleAddModal]="isVisibleAddModal" (toggleAddModal)="toggleAddModal()" ></app-add-task-modal>
+    </div>
+    <div *nzSpaceItem>
+        <nz-table #basicTable [nzData]="tasks|async">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Description</th>
+                    <th>Assignee</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let t of basicTable.data">
+                    <td>{{t.id}}</td>
+                    <td>{{t.description}}</td>
+                    <td>{{findUserById(t.assigneeId)}}</td>
+                    <td>{{t.completed ? 'Completed' : 'Not completed'}}</td>
+                    <td nzAlign="right">
+                        <nz-space>
+                            <button *nzSpaceItem nz-button (click)="openAssignModal(t)">Assign</button>
+                            <button *nzSpaceItem nz-button nzType="primary" (click)="onComplete(t)">
+                                {{!t.completed ? 'Complete' : 'Back to incomplete'}}
+                            </button>
+                        </nz-space>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+
+    </div>
+</nz-space>
+
+<nz-modal [(nzVisible)]="isVisibleAssignModal" nzTitle="Assign task" (nzOnCancel)="toggleAssignModal()" (nzOnOk)="handleAssignOk()">
+    <ng-container *nzModalContent>
+        <p>Assign task {{currentTask.id}} to: </p>
+        <nz-select class="select-user" nzShowSearch nzAllowClear nzPlaceHolder="Select user" [(ngModel)]="selectedUser">
+            <nz-option *ngFor="let user of users | async" [nzLabel]="user.name" [nzValue]="user.id"></nz-option>
+        </nz-select>
+    </ng-container>
+</nz-modal>

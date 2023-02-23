@@ -1,0 +1,12 @@
+<nz-modal [(nzVisible)]="isVisibleAddModal" nzTitle="Add task" (nzOnCancel)="closeModal()"
+    (nzOnOk)="submitForm()" nzOkText="Add">
+    <ng-container *nzModalContent>
+        <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm">
+            <nz-form-item class="full-width">
+              <nz-form-control nzErrorTip="Please input description!">
+                <textarea rows="4" nz-input placeholder="Enter description" formControlName="description"></textarea>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+    </ng-container>
+</nz-modal>
