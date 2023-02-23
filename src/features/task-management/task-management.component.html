@@ -1,0 +1,23 @@
+<table>
+    <thead>
+        <tr>
+            <th>Task</th>
+            <th>Description</th>
+            <th>Assignee</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let t of tasks|async">
+            <td>{{t.id}}</td>
+            <td>{{t.description}}</td>
+            <td>{{findUserById(t.assigneeId)}}</td>
+            <td>{{t.completed ? 'Completed' : 'Not completed'}}</td>
+            <td>
+                <button (click)="onAssign(t)">Assign</button>
+                <button (click)="onComplete(t)">{{!t.completed ? 'Complete' : 'Back to incomplete'}}</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
