@@ -13,7 +13,10 @@ function randomDelay() {
   return Math.random() * 1000;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
+
 export class UserService {
   storedUsers: User[] = [
     { id: 111, name: "Mike" },

@@ -1,0 +1,6 @@
+<nz-descriptions nzTitle="Task Info" *ngIf="task |async as task">
+    <nz-descriptions-item nzTitle="Task ID">{{task.id}}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Description">{{task.description}}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Assignee">{{findUserById(task.assigneeId)}}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Status">{{task.completed ? 'Completed' : 'Not completed'}}</nz-descriptions-item>
+</nz-descriptions>

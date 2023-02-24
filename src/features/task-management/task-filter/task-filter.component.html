@@ -1,0 +1,50 @@
+<form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <div nz-row [nzGutter]="24" class="full-width">
+        <div nz-col [nzSpan]="6">
+            <nz-form-item class="full-width">
+                <nz-form-label nzFor="description">Task</nz-form-label>
+                <nz-form-control>
+                    <input rows="4" nz-input placeholder="Enter description" formControlName="description" />
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="6">
+            <nz-form-item class="full-width">
+                <nz-form-label nzFor="assigneeId">Assignee</nz-form-label>
+                <nz-form-control>
+                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select user" formControlName="assigneeId">
+                        <nz-option nzLabel="All" [nzValue]="-1"></nz-option>
+                        <nz-option *ngFor="let user of users | async" [nzLabel]="user.name" [nzValue]="user.id">
+                        </nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+            <nz-form-item class="full-width">
+                <nz-form-label nzFor="completed">Is completed?</nz-form-label>
+                <nz-form-control>
+                    <nz-select nzAllowClear nzPlaceHolder="Select" formControlName="completed">
+                        <nz-option nzLabel="All" [nzValue]="-1"></nz-option>
+                        <nz-option nzLabel="Completed" [nzValue]="true"></nz-option>
+                        <nz-option nzLabel="Not completed" [nzValue]="false"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+            <div nz-space>
+            <button *nzSpaceItem nz-button nzType="default" (click)="clearSearch()">
+                Clear
+            </button>
+            <button *nzSpaceItem nz-button nzType="primary">
+                <i nz-icon nzType="search"></i>
+                Search
+            </button>
+            </div>
+        </div>
+
+    </div>
+
+</form>

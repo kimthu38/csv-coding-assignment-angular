@@ -9,6 +9,13 @@ const routes: Routes = [
         (m) => m.TaskManagementModule
       ),
   },
+  {
+    path: 'task/:id',
+    loadChildren: () =>
+      import('@/features/task-detail/task-detail.module').then(
+        (m) => m.TaskDetailModule
+      ),
+  },
   { path: '', pathMatch: 'full', redirectTo: '/list' },
 ];
 

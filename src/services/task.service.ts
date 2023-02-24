@@ -5,9 +5,14 @@ import {
   of,
   throwError,
   BehaviorSubject,
+  Subject,
   Subscription,
 } from "rxjs";
-import { delay, tap } from "rxjs/operators";
+import { delay, shareReplay, map } from "rxjs/operators";
+import _filter from 'lodash/filter'
+import _pickBy from 'lodash/pickBy'
+import _identity from 'lodash/identity'
+
 
 /**
  * This service acts as a mock backend.
@@ -34,22 +39,10 @@ const initialTasks = [
   },
 ];
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TaskService {
-  // storedTasks: Task[] = [
-  //   {
-  //     id: 0,
-  //     description: "Install a monitor arm",
-  //     assigneeId: 111,
-  //     completed: false,
-  //   },
-  //   {
-  //     id: 1,
-  //     description: "Move the desk to the new location",
-  //     assigneeId: 111,
-  //     completed: false,
-  //   },
-  // ];
 
   storedTasksSubject = new BehaviorSubject<Task[]>(initialTasks);
   storedTasks: Task[] = [];
@@ -62,19 +55,23 @@ export class TaskService {
     this.subscribe = this.storedTasksSubject
       .asObservable()
       .subscribe((data) => {
+        console.log(data);
+        
         this.storedTasks = data;
       });
   }
 
-  private findTaskById = (id) =>
-    this.storedTasks.find((task) => task.id === +id);
+  // private findTaskById = (id) =>
+  //   this.storedTasks.find((task) => task.id === +id);
+  private findTaskById = (array, id) =>
+    array.find((task) => task.id === +id);
 
   tasks() {
     return this.storedTasksSubject.asObservable().pipe(delay(randomDelay()));
   }
 
   task(id: number): Observable<Task> {
-    return of(this.findTaskById(id)).pipe(delay(randomDelay()));
+    return of(this.findTaskById(this.storedTasks, id)).pipe(delay(randomDelay()));
   }
 
   newTask(payload: { description: string }) {
@@ -99,7 +96,7 @@ export class TaskService {
   }
 
   update(taskId: number, updates: Partial<Omit<Task, "id">>) {
-    const foundTask = this.findTaskById(taskId);
+    const foundTask = this.findTaskById(this.storedTasks, taskId);
 
     if (!foundTask) {
       return throwError(new Error("task not found"));
@@ -114,6 +111,10 @@ export class TaskService {
     this.storedTasksSubject.next(_tasks);
 
     return of(updatedTask).pipe(delay(randomDelay()));
+  }
+
+  filter(payload: Partial<Task>){
+    return of(_filter(this.storedTasks, _pickBy(payload, _identity))).pipe(delay(randomDelay()))
   }
 
   unsubscribe() {

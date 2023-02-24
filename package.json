@@ -10,8 +10,9 @@
     "@angular/platform-browser": "12.2.3",
     "@angular/platform-browser-dynamic": "12.2.3",
     "@angular/router": "12.2.3",
-    "ng-zorro-antd": "^12.0.0",
     "core-js": "2.6.2",
+    "lodash": "^4.17.21",
+    "ng-zorro-antd": "^12.0.0",
     "sass": "^1.38.1",
     "zone.js": "~0.11.4"
   },

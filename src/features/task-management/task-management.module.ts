@@ -15,15 +15,17 @@ import { AddTaskModalComponent } from './add-task-modal/add-task-modal.component
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { TaskFilterComponent } from './task-filter/task-filter.component';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 
 
 
 @NgModule({
   declarations: [
     TaskManagementComponent,
-    AddTaskModalComponent
+    AddTaskModalComponent,
+    TaskFilterComponent
   ],
-  providers: [TaskService, UserService],
   imports: [
     CommonModule,
     TaskManagementRoutingModule,
@@ -36,6 +38,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     NzFormModule,
     NzInputModule,
     NzIconModule,
+    NzMessageModule
 
   ]
 })
