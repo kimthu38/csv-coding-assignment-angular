@@ -13,7 +13,7 @@
             <nz-form-item class="full-width">
                 <nz-form-label nzFor="assigneeId">Assignee</nz-form-label>
                 <nz-form-control>
-                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Select user" formControlName="assigneeId">
+                    <nz-select (ngModelChange)="onChangeUser($event)" nzShowSearch nzAllowClear nzPlaceHolder="Select user" formControlName="assigneeId">
                         <nz-option nzLabel="All" [nzValue]="-1"></nz-option>
                         <nz-option *ngFor="let user of users | async" [nzLabel]="user.name" [nzValue]="user.id">
                         </nz-option>
@@ -25,7 +25,7 @@
             <nz-form-item class="full-width">
                 <nz-form-label nzFor="completed">Is completed?</nz-form-label>
                 <nz-form-control>
-                    <nz-select nzAllowClear nzPlaceHolder="Select" formControlName="completed">
+                    <nz-select (ngModelChange)="onChangeStatus($event)" nzAllowClear nzPlaceHolder="Select" formControlName="completed">
                         <nz-option nzLabel="All" [nzValue]="-1"></nz-option>
                         <nz-option nzLabel="Completed" [nzValue]="true"></nz-option>
                         <nz-option nzLabel="Not completed" [nzValue]="false"></nz-option>

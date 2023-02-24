@@ -17,8 +17,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { TaskFilterComponent } from './task-filter/task-filter.component';
 import { NzMessageModule } from 'ng-zorro-antd/message';
-
-
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 @NgModule({
   declarations: [
@@ -38,7 +37,8 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     NzFormModule,
     NzInputModule,
     NzIconModule,
-    NzMessageModule
+    NzMessageModule,
+    NzDropDownModule,
 
   ]
 })

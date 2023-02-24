@@ -15,6 +15,7 @@ import {
 export class AddTaskModalComponent implements OnInit {
   @Input() isVisibleAddModal: boolean = false;
   @Output() toggleAddModal = new EventEmitter();
+  @Output() onAdd = new EventEmitter();
   validateForm!: FormGroup;
 
   constructor(private fb: FormBuilder, private taskService: TaskService) {}
@@ -32,7 +33,7 @@ export class AddTaskModalComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.valid) {
-      this.taskService.newTask(this.validateForm.value);
+      this.onAdd.emit(this.validateForm.value);
       this.closeModal()
 
     } else {

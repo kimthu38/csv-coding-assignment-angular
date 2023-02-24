@@ -27,15 +27,28 @@ export class TaskFilterComponent implements OnInit {
     });
   }
 
+  onChangeUser(userId) {
+    if (!userId) {
+      this.validateForm.setValue({...this.validateForm.value, assigneeId: -1 });
+    }
+  }
+
+  onChangeStatus(id) {
+    if (id === null || id === undefined) {
+      this.validateForm.setValue({...this.validateForm.value, completed: -1 });
+    }
+  }
+
   submitForm(): void {
     this.onFilter.emit(this.validateForm.value);
   }
+
   clearSearch() {
     this.validateForm.reset({
       assigneeId: -1,
       completed: -1,
     });
-    
+
     this.submitForm();
   }
 }

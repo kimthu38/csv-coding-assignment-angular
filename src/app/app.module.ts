@@ -21,8 +21,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     HttpClientModule,
     NzLayoutModule,
     NzBreadCrumbModule,
-    NzMenuModule
-
+    NzMenuModule,
   ],
   providers: [BackendService, { provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],

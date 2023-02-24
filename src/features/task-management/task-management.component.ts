@@ -20,7 +20,7 @@ export class TaskManagementComponent implements OnInit {
   selectedUser = null;
   currentTask: Task = { id: null };
   loading = new BehaviorSubject<boolean>(false);
-  tasks = this.taskService.tasks();
+  tasks = this.getTasks();
 
   constructor(
     private taskService: TaskService,
@@ -31,6 +31,9 @@ export class TaskManagementComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  getTasks(){
+    return this.taskService.tasks().pipe(indicate(this.loading));
+  }
   findUserById(id) {
     return this.userService.findUserById(id)?.name || "";
   }
@@ -40,17 +43,20 @@ export class TaskManagementComponent implements OnInit {
       .complete(task.id, !task.completed)
       .subscribe((response) => {
         this.message.success("The task has been completed");
+        this.tasks = this.getTasks();
       });
   }
 
   openAssignModal(task: Task) {
     this.currentTask = task;
     this.isVisibleAssignModal = true;
+    this.selectedUser = task.assigneeId;
   }
 
   onAssign(id: number, assigneeId: number) {
     this.taskService.assign(id, assigneeId).subscribe((response) => {
       this.message.success("The task has been assigned sucessfully");
+      this.tasks = this.getTasks();
     });
   }
 
@@ -69,16 +75,20 @@ export class TaskManagementComponent implements OnInit {
     this.isVisibleAddModal = !this.isVisibleAddModal;
   }
 
+  handleAddTask(value){
+    this.taskService.newTask(value).subscribe(data =>{
+      this.message.success("Task has been add successfully");
+      this.tasks = this.getTasks();
+    })
+  }
+
   handleFilter(value) {
     this.tasks = this.taskService.filter({
       ...value,
       assigneeId: value.assigneeId === -1 ? undefined : value.assigneeId,
       completed: value.completed === -1 ? undefined : value.completed,
     }).pipe(
-      finalize(()=>{
-        console.log('122');
-        
-      })
+      indicate(this.loading)
     );
   }
 

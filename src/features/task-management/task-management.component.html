@@ -1,7 +1,8 @@
 <nz-space nzDirection="vertical" class="full-width" nzSize="large">
     <div *nzSpaceItem class="add-style">
         <button nz-button [nzType]="'primary'" (click)="toggleAddModal()"><span>Add task</span></button>
-        <app-add-task-modal [isVisibleAddModal]="isVisibleAddModal" (toggleAddModal)="toggleAddModal()" ></app-add-task-modal>
+        <app-add-task-modal (onAdd)="handleAddTask($event)" [isVisibleAddModal]="isVisibleAddModal"
+            (toggleAddModal)="toggleAddModal()"></app-add-task-modal>
     </div>
     <div *nzSpaceItem>
         <app-task-filter (onFilter)="handleFilter($event)"></app-task-filter>
@@ -13,7 +14,7 @@
                     <th>Task</th>
                     <th>Assignee</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -22,13 +23,24 @@
                     <td>{{findUserById(t.assigneeId)}}</td>
                     <td>{{t.completed ? 'Completed' : 'Not completed'}}</td>
                     <td nzAlign="right">
-                        <nz-space>
-                            <button *nzSpaceItem nz-button (click)="openAssignModal(t)">Assign</button>
-                            <button *nzSpaceItem nz-button nzType="primary" (click)="onComplete(t)">
-                                {{!t.completed ? 'Complete' : 'Incomplete'}}
-                            </button>
-                            <button *nzSpaceItem nz-button (click)="viewDetail(t)">Detail</button>
-                        </nz-space>
+                        <button nz-button nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'"
+                            nzType="text"><i nz-icon nzType="more" nzTheme="outline"></i></button>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu class="dropdown-action">
+                                <li nz-menu-item (click)="openAssignModal(t)">
+                                    <i nz-icon nzType="send" nzTheme="outline"></i>
+                                    Assign
+                                </li>
+                                <li nz-menu-item (click)="onComplete(t)">
+                                    <ng-container *ngIf="!t.completed; else b">
+                                        <i nz-icon nzType="check-circle" nzTheme="outline"></i> Complete
+                                    </ng-container>
+                                    <ng-template #b><i nz-icon nzType="minus-circle" nzTheme="outline"></i> Incomplete
+                                    </ng-template>
+                                </li>
+                                <li nz-menu-item (click)="viewDetail(t)"><i nz-icon nzType="info-circle" nzTheme="outline"></i> View detail</li>
+                            </ul>
+                        </nz-dropdown-menu>
                     </td>
                 </tr>
             </tbody>
@@ -37,7 +49,8 @@
     </div>
 </nz-space>
 
-<nz-modal [(nzVisible)]="isVisibleAssignModal" nzTitle="Assign task" (nzOnCancel)="toggleAssignModal()" (nzOnOk)="handleAssignOk()">
+<nz-modal [(nzVisible)]="isVisibleAssignModal" nzTitle="Assign task" (nzOnCancel)="toggleAssignModal()"
+    (nzOnOk)="handleAssignOk()">
     <ng-container *nzModalContent>
         <p>Assign task {{currentTask.id}} to: </p>
         <nz-select class="select-user" nzShowSearch nzAllowClear nzPlaceHolder="Select user" [(ngModel)]="selectedUser">
